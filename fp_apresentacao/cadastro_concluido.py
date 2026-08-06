@@ -1,5 +1,5 @@
 import sqlite3
-import os, platform
+import os, platform, time
 
 def limpar_tela():
     sistema_operacional = platform.system()
@@ -28,14 +28,16 @@ def inicializar_banco():
 
 def cadastrar_usuario():
     while True:
+        time.sleep(1.5)
+
         limpar_tela()
-        try:
-            nome_completo = input("Digite seu nome completo: ").strip()
+        try: #Bloco onde podem ocorrer erros.
+            nome_completo = input("Digite seu nome completo: ").strip() #remove os espaços
             if not nome_completo:
                 raise ValueError("O nome não pode ficar vazio.")
-            if not nome_completo.replace(" ", "").isalpha():
+            if not nome_completo.replace(" ", "").isalpha(): #existe apenas letras
                 raise ValueError("O nome deve conter apenas letras.")
-            partes_nome = nome_completo.split()
+            partes_nome = nome_completo.split() #divide o texto
             if len(partes_nome) < 2:
                 raise ValueError("Digite nome e sobrenome.")
             nome = partes_nome[0]
@@ -51,7 +53,7 @@ def cadastrar_usuario():
             # Conectar ao banco para verificar se o e-mail já existe
             conexao = sqlite3.connect("Dados.db")
             cursor = conexao.cursor()
-            cursor.execute("SELECT email FROM Dados WHERE email = ?", (email,)) # esse tipo de consulta é melhor do que concatenar strings usando o f-string pq previne SQL injection
+            cursor.execute("SELECT email FROM Dados WHERE email = ?", (email,)) # esse tipo de consulta é melhor do que concatenar strings usando o f-string pq previne SQL injection.
             
             if cursor.fetchone():
                 conexao.close()
@@ -78,7 +80,7 @@ def cadastrar_usuario():
             print("\nCadastro realizado com sucesso!\n")
             break
 
-        except ValueError as erro:
+        except ValueError as erro: #Captura erros do tipo: ValueError
             print(f"Erro: {erro}")
 
 
@@ -99,6 +101,9 @@ def login_usuario():
         limpar_tela()
         print("\nLogin realizado com sucesso!")
         print(f"Bem-vindo, {usuario[0]}!")
+
+        time.sleep(2)
+
         return {"nome": usuario[0], "sobrenome": usuario[1], "email": usuario[2]}
     else:
         print("E-mail ou senha incorretos.")
@@ -124,6 +129,8 @@ def listar_usuarios():
             print(f"Nome: {usuario[0]} {usuario[1]}")
             print(f"E-mail: {usuario[2]}")
 
+    input("Aperte a tecla ENTER para sair.")
+
 
 def buscar_usuario():
 
@@ -144,6 +151,8 @@ def buscar_usuario():
     else:
         print("Usuário não encontrado.")
 
+    input("Aperte a tecla ENTER para sair.")
+
 
 def atualizar_usuario():
     limpar_tela()
@@ -153,7 +162,7 @@ def atualizar_usuario():
     cursor = conexao.cursor()
     
     # Verifica se o usuário existe antes de tentar atualizar
-    cursor.execute("SELECT nome, sobrenome FROM Dados WHERE email = ?", (email,))
+    cursor.execute("SELECT nome, sobrenome, senha FROM Dados WHERE email = ?", (email,))
     usuario = cursor.fetchone()
 
     if usuario:
@@ -178,20 +187,26 @@ def atualizar_usuario():
         elif not novo_sobrenome:
             novo_sobrenome = usuario[1]
 
+        nova_senha = input("Nova senha [ENTER para manter a atual]: ").strip()
+        if not nova_senha:
+            nova_senha = usuario[2]
+
         # Atualiza no banco
         cursor.execute("""
             UPDATE Dados 
-            SET nome = ?, sobrenome = ? 
+            SET nome = ?, sobrenome = ?, senha = ?
             WHERE email = ?
-        """, (novo_nome, novo_sobrenome, email))
+        """, (novo_nome, novo_sobrenome, nova_senha, email))
         
         conexao.commit()
         print("Usuário atualizado com sucesso!")
+        input("pressione ENTER para sair. ")
+
     else:
         print("Usuário não encontrado.")
+        input("pressione ENTER para sair. ")
         
     conexao.close()
-
 
 def excluir_usuario():
     limpar_tela()
@@ -207,6 +222,7 @@ def excluir_usuario():
         cursor.execute("DELETE FROM Dados WHERE email = ?", (email,))
         conexao.commit()
         print("Usuário removido com sucesso!")
+        input("pressione ENTER para sair. ")
 
     else:
         print("Usuário não encontrado.")
@@ -221,7 +237,7 @@ def menu_conta():
 
     while True:
         limpar_tela()
-        print("\n===== MENU CADASTRO =====")
+        print("\n===== MENU ADMINISTRADOR =====")
         print("1 - Listar")
         print("2 - Buscar")
         print("3 - Atualizar")

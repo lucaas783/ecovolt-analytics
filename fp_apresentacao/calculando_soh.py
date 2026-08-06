@@ -115,7 +115,7 @@ def calcular_soh():
 
     # fazer um arquivo markdown para salvar no PC como relatorio
 
-    arquivo_relatorio = "ecovolt_relatorio_soh.md"
+    arquivo_relatorio = "ecovolt_relatorio_soh.md" # markdown
 
     conteudo_relatorio = f"""========================================
        RELATÓRIO DE SAÚDE DA BATERIA (SoH)
@@ -136,9 +136,11 @@ RESULTADO FINAL:
 Gerado automaticamente pelo sistema de cálculo SoH.
 """
 
-    with open(arquivo_relatorio, "w") as arquivo:
+    with open(arquivo_relatorio, "w", encoding="utf-8") as arquivo:
         arquivo.write(conteudo_relatorio)
     print(f"\n📄 Relatório detalhado salvo como '{arquivo_relatorio}'.")
+
+    input("Pressione ENTER para sair. ")
 
 
 if __name__ == "__main__":

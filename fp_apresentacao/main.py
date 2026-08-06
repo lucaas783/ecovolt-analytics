@@ -1,6 +1,6 @@
 import cadastro_concluido as cadastro
 from menu_logado import menu_principal, limpar_tela
-import os, platform, time, sqlite3
+import os, platform
 
 def limpar_tela():
     sistema_operacional = platform.system()
@@ -10,25 +10,13 @@ def limpar_tela():
     else:
         os.system("clear")
 
-
-def mensagem_boas_vindas():
-    conexao = sqlite3.connect("Dados.db")
-    cursor = conexao.cursor()
-    
-    # Busca o usuário com o e-mail e senha correspondentes
-    cursor.execute("SELECT nome, sobrenome, FROM Dados WHERE email = ? AND senha = ?", (email, senha))
-    usuario = cursor.fetchone()
-    conexao.close()
-    return f"bem vindo, {usuario[0]} {usuario[1]}!"
-
 def main():
 
     limpar_tela()
-    mensagem_boas_vindas()
 
-    print("\nBem-vindo ao EcoVolt Analytics! O sistema de avaliação de saúde da bateria do seu veículo elétrico!")
+    print("\nBem-vindo ao EcoVolt Analytics!\nO sistema de avaliação de saúde da bateria do seu veículo elétrico!")
 
-    print("\n1. Faça login para acessar o sistema\nOu crie uma conta par começar a usar.")
+    print("\nFaça login para acessar o sistema\nOu crie uma conta par começar a usar.")
 
     while True:
 

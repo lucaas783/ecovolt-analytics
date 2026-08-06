@@ -16,10 +16,10 @@ def menu_principal():
                 
                 time.sleep(1)
                 limpar_tela()
-                print(f"\nBem-vindo!")
+                print(f"\nBem-vindo! (ADMIN)")
                 print("\n=== MENU  PRINCIPAL ===\n== EcoVolt Analytics ==\n")
                 print("1. Calcular Saúde da Bateria (SoH)")
-                print("2. Gerenciar Conta")
+                print("2. Gerenciar Contas Registradas")
                 print("0. Sair")
 
                 escolha = input("Escolha uma opção: ").strip()
